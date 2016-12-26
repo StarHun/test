@@ -86,7 +86,7 @@ router.post('/signin', (req, res) => {
     }
 
     // ALTER SESSION
-    let session - req.session;
+    let session = req.session;
     session.loginInfo = {
       _id: account._id,
       username: account.username

@@ -5,7 +5,10 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import api from './routes';
+import WebpackDevServer from 'webpack-dev-server';
+import webpack from 'webpack';
 
+const devPort = 4000;
 const app = express();
 const port = 3000;
 const db = mongoose.connection;

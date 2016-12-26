@@ -9,12 +9,13 @@ module.exports = {
       entry: [
         './src/index.js',
         'webpack-dev-server/client?http://0.0.0.0:4000', //should write in her to active development server's port
-        'webpack/hot/only-dev-server'
+        'webpack/hot/only-dev-server',
+        './src/style.css'
       ],
 
       output: {
         path: '/', // file will save and used to memory due to use /
-        filename: 'bundle,js'
+        filename: 'bundle.js'
       },
 
       //development server config
@@ -22,7 +23,7 @@ module.exports = {
         hot: true,
         filename: 'bundle.js',
         publicPath: '/',
-        historyApiFallback: trune,
+        historyApiFallback: true,
         contentBase: './public',
         /* 모든 요청을 프록시로 돌려서 express의 응답을 받아오며,
         bundle 파일의 경우엔 우선권을 가져서 devserver 의 스크립트를 사용하게 됩니다 */

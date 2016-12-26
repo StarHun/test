@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
 
   // CHECK CONTENTS VALID
   if(typeof req.body.contents !== 'string') {
-    return res.status(400).json)({
+    return res.status(400).json({
       error: "EMPTY CONTENTS",
       code: 2
     });
@@ -134,7 +134,7 @@ router.put('/:id', (req, res) => {
 // DELETE MEMO
 router.delete('/:id', (req, res) => {
   //CHECK MEMO ID VALIDITY
-  if(!mongoose.Types.ObjectId.isValid(req,.params.id)) {
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({
       error: "INVALD ID",
       code: 1
