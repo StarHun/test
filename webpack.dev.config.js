@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
       /* webpack-dev-server를 콘솔이 아닌 자바스크립트로 실행 할 땐,
@@ -55,8 +56,15 @@ module.exports = {
               presets: ['es2015', 'react']
             })],
             exclude: /node_modules/,
+          },
+          {
+            test: /\.css$/,
+            loader: 'style!css-loader'
           }
         ]
+      },
+      resolve: {
+        root: path.resolve('./src')
       }
 
 };
