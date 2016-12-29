@@ -25,8 +25,8 @@ export function loginRequest(username, password) {
       }).catch((error) => {
         // FAILED
         dispatch(loginFailure());
-      })
-    }
+      });
+    };
 }
 
 export function login() {
