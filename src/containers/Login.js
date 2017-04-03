@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    tihs.handleLogin = this.handleLogin.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin(id, pw) {
