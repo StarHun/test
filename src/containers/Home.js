@@ -5,17 +5,47 @@ import { memoPostRequest, memoListRequest } from 'actions/memo';
 
 class Home extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.handlePost = this.handlePost.bind(this);
+    this.loadNewMemo = this.loadNewMemo.bind(this);
+  }
+
   componentDidMount() {
+    // LOAD NEW MEMO EVERY 5 SECONDS
+    const loadMemoLoop = () => {
+      this.loadNewMemo().then(
+        () => {
+          this.memoLoaderTimeoutID = setTimeout(loadMemoLoop, 5000);
+        }
+      );
+    };
+
     this.props.memoListRequest(true).then(
       () => {
-        console.log(this.props.memoData);
+        // BEGIIN NEW MEMO LOADING LOOP
+        loadMemoLoop();
       }
     );
   }
 
-  constructor(props) {
-    super(props);
-    this.handlePost = this.handlePost.bind(this);
+  componentWiillUnmount() {
+    // STOPS THE loadMemoLoop
+    clearTimeout(this.memoLoaderTimeoutID);
+  }
+
+  loadNewMemo() {
+    // CANCEL IF THERE IS A PENDING REQUEST
+    if(this.props.listStatus === 'WAITING')
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+
+          // IF PAGE IS EMPTY, DO THE INITIAL LOADING
+          if(this.props.memoData.length === 0 )
+            return this.props.memoListRequest(true);
+
+          return this.props.memoListRequest(false, 'new', this.props.memoData[0]._id);
   }
 
   /* POST MEMO */
@@ -24,8 +54,11 @@ class Home extends React.Component {
       () => {
         if(this.props.postStatus.status === "SUCCESS") {
           // TRIGGER LOAD NEW MEMO
-          // TO BE IMPLEMENTED
-          Materialize.toast('Success!', 2000);
+          this.loadNewMemo().then(
+            () => {
+              Materialize.toast('Success!', 2000);
+            }
+          );
         } else {
           /*
             ERROR CODES
@@ -55,87 +88,13 @@ class Home extends React.Component {
   }
   render() {
       const write = (
-        <Write onPost={this.props.handlePost}/>
+        <Write onPost={this.handlePost}/>
        );
 
-       var mockData = [
-            {
-                "_id": "578b958ec1da760909c263f4",
-                "writer": "velopert",
-                "contents": "Testing",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:22.428Z",
-                    "created": "2016-07-17T14:26:22.428Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b957ec1da760909c263f3",
-                "writer": "velopert",
-                "contents": "Data",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:06.999Z",
-                    "created": "2016-07-17T14:26:06.999Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b957cc1da760909c263f2",
-                "writer": "velopert",
-                "contents": "Mock",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:04.195Z",
-                    "created": "2016-07-17T14:26:04.195Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b9579c1da760909c263f1",
-                "writer": "velopert",
-                "contents": "Some",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T14:26:01.062Z",
-                    "created": "2016-07-17T14:26:01.062Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b9576c1da760909c263f0",
-                "writer": "velopert",
-                "contents": "Create",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T14:25:58.619Z",
-                    "created": "2016-07-17T14:25:58.619Z"
-                },
-                "starred": []
-            },
-            {
-                "_id": "578b8c82c1da760909c263ef",
-                "writer": "velopert",
-                "contents": "blablablal",
-                "__v": 0,
-                "is_edited": false,
-                "date": {
-                    "edited": "2016-07-17T13:47:46.611Z",
-                    "created": "2016-07-17T13:47:46.611Z"
-                },
-                "starred": []
-            }
-        ];
     return (
       <div className="wrapper">
         { this.props.isLoggedIn ? write : undefined }
-        <MemoList data={mockData} currentUser="velopert"/>
+        <MemoList data={this.props.memoData} currentUser={this.props.currentUser}/>
       </div>
     );
   }
@@ -146,7 +105,8 @@ const mapStateToProps = (state) => {
     isLoggedIn: state.authentication.status.isLoggedIn,
     postStatus: state.memo.post,
     currentUser: state.authentication.status.currentUser,
-    memoData: state.memo.list.data
+    memoData: state.memo.list.data,
+    listStatus: state.memo.list.status
   };
 };
 

@@ -53,10 +53,20 @@ export function memoPostFailure(error) {
 */
 export function memoListRequest(isInitial, listType, id, username) {
     return (dispatch) => {
-        // inform memo list aPI is starting
+        // inform memo list API is starting
         dispatch(memoList());
 
         let url = '/api/memo';
+
+        if(typeof username === "undefined") {
+          //username not given, load public memo
+          url = isInitial ? url : `${url}/${listType}/${id}`;
+        } else {
+          // load memos of specific user
+          // to be implemented
+        }
+
+
 
         /* url setup depending on parametrs,
            to be implemented.. */
