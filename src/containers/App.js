@@ -65,6 +65,7 @@ class App extends React.Component{
         };
 
         document.cookie = 'key=' + btoa(JSON.stringify(loginData));
+
       }
     );
   }
@@ -77,6 +78,7 @@ class App extends React.Component{
       <div>
         {isAuth ? undefined : <Header isLoggedIn={this.props.status.isLoggedIn}
                                         onLogout={this.handleLogout}/>}
+
         { this.props.children }
       </div>
     );

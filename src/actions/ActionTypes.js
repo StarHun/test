@@ -16,3 +16,20 @@ export const MEMO_POST_SUCCESS = "MEMO_POST_SUCCESS";
 export const MEMO_LIST = "MEMO_LIST";
 export const MEMO_LIST_SUCCESS = "MEMO_LIST_SUCCESS";
 export const MEMO_LIST_FAILURE = "MEMO_LIST_FAILURE";
+export const AUTH_LOGOUT = "AUTH_LOGOUT"
+
+/* REGISTER */
+export function registerRequest(username, password) {
+  return (dispatch) => {
+    // Inform Register API is starting
+    dispatch(register());
+
+    return axios.post('/api/account/singnup', { username, password})
+    .then((response) => {
+      dispatch(registerSuccess());
+    }).catch((error) => {
+      dispatch(registerFailure(error.response.data.code));
+    });
+  };
+}
+
