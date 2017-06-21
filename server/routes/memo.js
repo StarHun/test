@@ -15,7 +15,7 @@ const router = express.Router();
 // WRITE MEMO
 router.post('/', (req, res) => {
   // CHECK LOGIN STATUS
-  if(typeof req.session.loginInfo === 'underfined') {
+  if(typeof req.session.loginInfo === 'undefined') {
     return res.status(403).json({
       error: "NOT LOGGED IN",
       code: 1
@@ -72,7 +72,7 @@ router.put('/:id', (req, res) => {
     });
   }
 
-  if(req.body.contents == "") {
+  if(req.body.contents === "") {
     return res.status(400).json({
       error: "EMPTY CONTENTS",
       code: 2
@@ -142,7 +142,7 @@ router.delete('/:id', (req, res) => {
   }
 
   //CHECK LOGIN STATUS
-  if(typeof req.session.loginInfo === 'underfined') {
+  if(typeof req.session.loginInfo === 'undefined') {
     return res.status(403).json({
       error: "NOT LOGGED IN",
       code: 2
@@ -185,6 +185,51 @@ router.get('/', (req, res) => {
     if(err) throw err;
     res.json(memos);
   });
+});
+
+
+// READ ADDITIONAL (LOD/NEW) MEMO: GET /api/memo/:listType/:id
+router.get('/:listType/:id', (req, res) => {
+  let listType = req.params.listType;
+  let id = req.params.id;
+
+  // CHECK LIST TYPE VALIDITY
+  if(listType !== 'old' && listType !== 'new') {
+    return res.status(400).json({
+      error: "INVALID LISTTYPE",
+      code: 1
+    });
+  }
+
+  // CHECK MEMO ID VALIDITY
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      error: "INVALID ID",
+      code: 2
+    });
+  }
+
+  let objID = new mongoose.Types.ObjectId(req.params.id);
+
+  if(listType === 'new') {
+    // GET NEWER MEMO
+    Memo.find({ _id: { $gt: objID }})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, memos) => {
+      if(err) throw err;
+      return res.json(memos);
+    });
+  } else {
+    // GET OLDER MEMO
+    Memo.find({ _id: { $lt: objID}})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, memos) => {
+      if(err) throw err;
+      return res.json(memos);
+    });
+  }
 });
 
 export default router;
