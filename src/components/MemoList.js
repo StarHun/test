@@ -19,16 +19,16 @@ class MemoList extends React.Component {
             </div>
         );
     }
-}
+  }
 
 MemoList.propTypes = {
-  data: React.PropTypes.array,
-  currentUser: React.PropTypes.string
+    data: React.PropTypes.array,
+    currentUser: React.PropTypes.string
 };
 
 MemoList.defaultProps = {
-  data: [],
-  currentUser: ''
+    data: [],
+    currentUser: ''
 };
 
 export default MemoList;

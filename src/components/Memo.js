@@ -46,6 +46,7 @@ class Memo extends React.Component {
       </div>
 
     );
+
     return (
       <div className="container memo">
           <div className="card">
@@ -62,11 +63,11 @@ class Memo extends React.Component {
                   </div>
               </div>
               <div className="card-content">
-                  Contents
+                  {data.contents}
               </div>
               <div className="footer">
                   <i className="material-icons log-footer-icon start cion-button">star</i>
-                  <span className="star-count">0</span>
+                  <span className="star-count">{data.starred.length}</span>
               </div>
           </div>
       </div>

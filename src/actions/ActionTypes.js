@@ -16,7 +16,6 @@ export const MEMO_POST_SUCCESS = "MEMO_POST_SUCCESS";
 export const MEMO_LIST = "MEMO_LIST";
 export const MEMO_LIST_SUCCESS = "MEMO_LIST_SUCCESS";
 export const MEMO_LIST_FAILURE = "MEMO_LIST_FAILURE";
-export const AUTH_LOGOUT = "AUTH_LOGOUT"
 
 /* REGISTER */
 export function registerRequest(username, password) {
@@ -32,4 +31,3 @@ export function registerRequest(username, password) {
     });
   };
 }
-

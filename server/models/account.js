@@ -15,7 +15,7 @@ Account.methods.generateHash = function(password) {
 };
 
 Account.methods.vaildateHash = function(password) {
-  return bcrypt.compareSync(password, this.password)
-}
+  return bcrypt.compareSync(password, this.password);
+};
 
 export default mongoose.model('account', Account);

@@ -88,7 +88,9 @@ class Home extends React.Component {
   }
   render() {
       const write = (
-        <Write onPost={this.handlePost}/>
+        <Write
+          onPost={this.handlePost}
+          />
        );
 
     return (

@@ -65,15 +65,15 @@ export default function memo(state, action) {
         } else {
           return update(state, {
             list: {
-              status: { $set: 'SUCCESS' },
+              stattus: { $set: 'SUCCESS' },
               data: { $push: action.data },
-              isLast: { $set: action.data.length >6}
+              isLast: { $set: action.data.length < 6 }
             }
           });
         }
-
-
       }
+
+      return state;
 
     case types.MEMO_LIST_FAILURE:
       return update(state, {
